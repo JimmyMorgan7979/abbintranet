@@ -12,7 +12,6 @@ router.get('/', function(req,res){
     console.log(`MDB -> By ${ip} at ${date}`)
 })
 
-
 // Initial Search Results
 router.post('/mdbResults', function(req,res) {
     var search = req.body;
@@ -31,13 +30,13 @@ router.post('/model', function(req,res){
     var test = req.body;
     models.findOne({_id:test.id},function(err,docs){
         let fixlink = docs.link.slice(0,docs.link.length-4)
-        res.render('pages/mdbModel.ejs',{docs,fixlink, banner: 'Models Database', message:""})
+        let fixturePhoto = "\\static\\" + docs.test_fixture_photo_link
+        res.render('pages/mdbModel.ejs',{docs,fixlink,fixturePhoto, banner: 'Models Database', message:""})
         let servedat = Date();
         console.log(`Served test ${docs.modelnumber} at ${servedat}`)
         let ip = req.ip
         console.log(ip)
     })
 });
-
 
 module.exports = router

@@ -3,14 +3,14 @@
           <div>
     <h1>Model Number Database</h1>
 </div>
-<div>  
+<!-- <div>  
   <form action = "/results" method = 'POST'>
     Search Model Number
     <input type="text" name = "searchword" value= ""></input>
     <button type="submit">Search</button>
     <a href="/">Go back</a>
   </form>
-</div>
+</div> -->
         </div>    
         <div class="flex-container2">
           <div class="one">
@@ -38,7 +38,7 @@
           <tr>
             <th>Link to Procedure:</th>
             <td><% if(docs.link) { %> 
-              <a href="/test_procedures/<%= fixlink %>.pdf"><%= fixlink %>.pdf</a> 
+              <a href="/static/testProcedures/<%= fixlink %>.pdf"><%= fixlink %>.pdf</a> 
               <% } %>
             </td>
           </tr>
@@ -73,7 +73,7 @@
         </table>
           </div>
           <div class="image-container">
-            <% if(docs.test_fixture_photo_link) { %><img src="<%= docs.test_fixture_photo_link %>"> <% } %>
+            <% if(docs.test_fixture_photo_link) { %><img src="<%= fixturePhoto %>"> <% } %>
             <!--<img src="/Fixture_Photos/H033899.JPG">-->
           </div>
         </div>     
