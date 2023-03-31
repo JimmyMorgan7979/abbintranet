@@ -1,0 +1,17 @@
+<body>
+    <div>
+        <h3><%= message %></h3>
+        </div>
+        <a href="/">Go back</a>
+        <h3>** Select your model from the list below ** </h3>
+
+        <% docs.forEach(function(doc) { %>
+            <form class="resultform" action="/mdb/model" method='POST'> 
+                <strong><%= doc.modelnumber %></strong>
+                <input type="hidden" name = "id" value = "<%=doc._id %>">
+                <button type='submit' class="resultbutton" style="padding:.5rem; margin-left:1.5rem;">Go</button>
+            </form>
+        <% }); %>
+
+    </div>    
+</body>

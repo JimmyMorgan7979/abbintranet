@@ -1,0 +1,79 @@
+
+        <div class="flex-container1">
+          <div>
+    <h1>Model Number Database</h1>
+</div>
+<div>  
+  <form action = "/results" method = 'POST'>
+    Search Model Number
+    <input type="text" name = "searchword" value= ""></input>
+    <button type="submit">Search</button>
+    <a href="/">Go back</a>
+  </form>
+</div>
+        </div>    
+        <div class="flex-container2">
+          <div class="one">
+            <table>
+          <tr>
+            <th>Model Number:</th>
+            <td><% if(docs.modelnumber) { %> <%= docs.modelnumber %> <% } %></td>
+          </tr>
+              <tr>
+            <th>Description:</th>
+            <td><% if(docs.description) { %> <%= docs.description %> <% } %></td>
+          </tr>
+          <tr>
+            <th>Test Procedure Number:</th>
+            <td><% if(docs.procedure_number) { %> <%= docs.procedure_number %> <% } %></td>
+          </tr>
+          <tr>
+            <th>Current Revision:</th>
+            <td><% if(docs.latest_procedure_revision) { %> <%= docs.latest_procedure_revision %> <% } %></td>
+          </tr>
+          <tr>
+            <th>File Name:</th>
+            <td><% if(docs.file_name) { %> <%= docs.file_name %> <% } %></td>
+          </tr>
+          <tr>
+            <th>Link to Procedure:</th>
+            <td><% if(docs.link) { %> 
+              <a href="/test_procedures/<%= fixlink %>.pdf"><%= fixlink %>.pdf</a> 
+              <% } %>
+            </td>
+          </tr>
+          <tr>
+            <th>Farm out?:</th>
+            <td><% if(docs.farm_out) { %> <%= docs.farm_out %> <% } %></td>
+          </tr>
+          <tr>
+            <th>Conformal Coated:</th>
+            <td><% if(docs.conformal_coated) { %> <%= docs.conformal_coated %> <% } %></td>
+          </tr>
+          <tr>
+            <th>Test Fixture Id:</th>
+            <td><% if(docs. test_fixture_number) { %> <%= docs. test_fixture_number %> <% } %></td>
+          </tr>
+          <tr>
+            <th>Test Fixture Description:</th>
+            <td><% if(docs.test_fixture_description) { %> <%= docs.test_fixture_description %> <% } %></td>
+          </tr>
+          <tr>
+            <th>Test Fixture Notes</th>
+            <td><% if(docs.test_fixture_notes) { %> <%= docs.test_fixture_notes %> <% } %></td>
+          </tr>
+          <tr>
+            <th>Notes:</th>
+            <td><% if(docs.notes) { %> <%= docs.notes %> <% } %></td>
+          </tr>
+          <tr>
+            <th>Notes2:</th>
+            <td><% if(docs.notes2) { %> <%= docs.notes2 %> <% } %></td>
+          </tr>
+        </table>
+          </div>
+          <div class="image-container">
+            <% if(docs.test_fixture_photo_link) { %><img src="<%= docs.test_fixture_photo_link %>"> <% } %>
+            <!--<img src="/Fixture_Photos/H033899.JPG">-->
+          </div>
+        </div>     
