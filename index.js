@@ -15,7 +15,6 @@ var mongoose = require('mongoose')
 //var mongoDB ='mongodb://10.83.93.60:27017/inventory'
 // ******** LOCAL DATABASE ******
  var mongoDB ='mongodb://localhost:27017/inventory'
- var mongoDB ='mongodb://localhost:27017/mdb'
 // var mongoDB = 'mongodb+srv://admin:Pergatory_1979@cluster0.3duu7.mongodb.net/local_library?retryWrites=true&w=majority'
 mongoose.connect(mongoDB,{useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection;

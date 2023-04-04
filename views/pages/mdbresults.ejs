@@ -1,17 +1,20 @@
-<body>
-    <div>
-        <h3><%= message %></h3>
-        </div>
-        <a href="/mdb">Go back</a>
-        <h3>** Select your model from the list below ** </h3>
+<div class="row justify-content-center">
+    <h3><%= message %></h3>
+</div>
 
-        <% docs.forEach(function(doc) { %>
-            <form class="resultform" action="/mdb/model" method='POST'> 
-                <strong><%= doc.modelnumber %></strong>
-                <input type="hidden" name = "id" value = "<%=doc._id %>">
-                <button type='submit' class="resultbutton" style="padding:.5rem; margin-left:1.5rem;">Go</button>
-            </form>
-        <% }); %>
+<div class="row justify-content-center">
+    <a type='button' class="btn btn-warning m-2" href="/mdb">Go Back</a>
+</div>
 
-    </div>    
-</body>
+<div class="row justify-content-center py-2">
+    <h3>** Select your model from the list below ** </h3>
+</div>
+
+<% docs.forEach(function(doc) { %>
+    <div class="row justify-content-center py-1">
+        <form class="resultform" action="/mdb/model" method='POST'> 
+            <input type="hidden" name = "id" value = "<%=doc._id %>">
+            <button type='submit' class="btn btn-info" style="padding:.5rem; margin-left:1.5rem;"><strong><%= doc.modelnumber %></strong></button>
+        </form>
+    </div>
+<% }); %>
