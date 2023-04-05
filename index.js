@@ -11,11 +11,16 @@ app.use('/static', express.static(path.join(__dirname, 'public')))
 
 //Mongodb connection new 10-22-20
 var mongoose = require('mongoose')
+
 // *******NETWORK DATABASE ********
 //var mongoDB ='mongodb://10.83.93.60:27017/inventory'
-// ******** LOCAL DATABASE ******
+
+// ******** LOCAL DATABASE *********
 var mongoDB ='mongodb://localhost:27017/inventory'
+
+// ********** ATLAS DATABASE  **********
 // var mongoDB = 'mongodb+srv://admin:Pergatory_1979@cluster0.3duu7.mongodb.net/local_library?retryWrites=true&w=majority'
+
 mongoose.connect(mongoDB,{useNewUrlParser: true, useUnifiedTopology: true});
 var db = mongoose.connection
 db.on('error', console.error.bind(console,'MongoDB connection error:'));
@@ -68,6 +73,7 @@ app.use('/partHome', require('./routes/part.js'))
 app.use('/partLogin', require('./routes/partUser.js'))
 app.use('/partRequest', require('./routes/reqPart.js'))
 app.use('/mdb', require('./routes/mdb.js'))
+app.use('/jeff', require('./routes/jeff.js'))
 
 
 //Port that the app sends to
