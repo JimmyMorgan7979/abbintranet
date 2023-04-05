@@ -13,14 +13,35 @@ router.get('/', function(req,res){
     console.log(`Parts -> by ${ip} at ${date}`)
 })
 
+// //Route for search by Part Number results to be displayed
+// router.post('/partSearchResult', function(req,res){
+//     var search = req.body
+//     Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
+//         function(err,response){
+//             res.render('pages/partSearchResult', {banner: 'Search Results', search,response, message:''})
+//         }).limit(20)
+// })
+
 //Route for search by Part Number results to be displayed
 router.post('/partSearchResult', function(req,res){
-    var search = req.body
-    Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
-        function(err,response){
-            res.render('pages/partSearchResult', {banner: 'Search Results', search,response, message:''})
-        }).limit(20)
-})
+        var search = req.body
+        let ip = req.ip
+        let date = new Date().toLocaleString()
+        if (ip == '::ffff:127.0.0.1'){
+            console.log("Your Special     " )
+            console.log(`Jeffro -> by ${ip} at ${date}`)
+            Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
+            function(err,response){
+                res.render('pages/jeffPartSearchResult', {banner: 'Jeffs Search Results', search,response, message:''})
+            }).limit(20)
+            }else{
+                console.log(`Parts -> by ${ip} at ${date}`)
+                Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
+            function(err,response){
+                res.render('pages/partSearchResult', {banner: 'Search Results', search,response, message:''})
+            }).limit(20)
+            }
+        })
 
 //Route for parts search by LV number
 router.get('/partHomeLV', function(req,res){
