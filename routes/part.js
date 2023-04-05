@@ -38,7 +38,7 @@ router.post('/partSearchResult', function(req,res){
                 console.log(`Parts -> by ${ip} at ${date}`)
                 Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
             function(err,response){
-                res.render('pages/jeffPartSearchResult', {banner: 'Jeffs Search Results', search,response, message:''})
+                res.render('pages/partSearchResult', {banner: 'Search Results', search,response, message:''})
             }).limit(20)
             }
         })
