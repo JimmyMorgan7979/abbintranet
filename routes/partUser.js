@@ -108,10 +108,12 @@ router.post('/partLogin', (req, res, next) => {
 )
   
 // Logout Parts
-router.get('/partLogout', (req, res) => {
-    req.logout()
-    req.flash('success_msg', 'You are logged out')
-    res.redirect('/partLogin')
+router.get('/partLogout', (req, res, next) => {
+    req.logout(function(err) {
+        if (err) { return next(err) }
+        req.flash('success_msg', 'You are logged out')
+        res.redirect('/partLogin')
+    })
 })
 
 //Route to update password in user database

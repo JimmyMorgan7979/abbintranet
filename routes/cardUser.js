@@ -108,9 +108,11 @@ router.post('/cardLogin', (req, res, next) => {
   
 // Logout Legacy
 router.get('/cardLogout', (req, res) => {
-    req.logout()
-    req.flash('success_msg', 'You are logged out')
-    res.redirect('/cardLogin')
+    req.logout(function(err) {
+        if (err) { return next(err) }
+        req.flash('success_msg', 'You are logged out')
+        res.redirect('/cardLogin')
+    })
 })
 
 //Route to update password in user database
