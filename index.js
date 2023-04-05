@@ -73,7 +73,7 @@ app.use('/partHome', require('./routes/part.js'))
 app.use('/partLogin', require('./routes/partUser.js'))
 app.use('/partRequest', require('./routes/reqPart.js'))
 app.use('/mdb', require('./routes/mdb.js'))
-app.use('/jeff', require('./routes/jeff.js'))
+// app.use('/jeff', require('./routes/jeff.js'))
 
 
 //Port that the app sends to
