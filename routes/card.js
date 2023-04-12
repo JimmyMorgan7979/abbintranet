@@ -12,7 +12,7 @@ router.get('/', function(req,res){
     let date = new Date().toLocaleString();
     if (ip == `::ffff:127.0.0.1`){
         console.log("your special")
-        res.render('pages/cardHome',{banner: "Legacy Search", message: ""})
+        res.render('pages/cardHomeWithAdd',{banner: "Legacy Search", message: ""})
     }else {
         console.log(`Legacy -> By ${ip} at ${date}`)
         res.render('pages/cardHome',{banner: "Legacy Search", message: ""})
