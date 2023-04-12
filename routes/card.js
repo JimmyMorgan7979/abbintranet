@@ -108,7 +108,7 @@ router.post('/cardEdit/:id', function(req,res){
 // Route to edit cards by model number
 router.post('/cardUpdate', function(req,res){
     var search = req.body
-    Card.find({partNumber: {$regex: search.searchWord,$options:'i'}},
+    Card.find({'partNumber': {'$regex': search.searchWord,$options:'i'}},
     function(err,response){
         res.render('pages/cardUpdate', {banner: 'Search Results to Update Legacy Record', search,response, message:''})
     }).limit(20);
@@ -117,7 +117,7 @@ router.post('/cardUpdate', function(req,res){
 // Route to edit card by serial number
 router.post('/cardUpdateSN', function(req,res){
     var search = req.body
-    Card.find({serialNumber: {$regex: search.searchWord,$options:'i'}},
+    Card.find({'serialNumber': {'$regex': search.searchWord}},
     function(err,response){
         if (response == null){ 
             res.render('pages/cardEdit', {banner: 'Search Results to Update Legacy Record', search, message:'No Record Found'}) 
