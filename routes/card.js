@@ -1,24 +1,39 @@
 const { response } = require('express')
 const express = require('express')
 const router = express.Router()
-const address = "127.0.0.1"
 
 // Load DB Models
 const Card = require('../models/Card')
 const RemovedCard = require('../models/RemovedCard')
+const User = require('../models/User')
 
 // Route for home page "Legacy Search"
-router.get('/', function(req,res){
-    let ip = req.ip
+// router.get('/', function(req,res){
+//     let ip = req.ip
+//     let date = new Date().toLocaleString();
+//     if (ip == `::ffff:`+address){
+//         console.log("your special")
+//         res.render('pages/cardHomeWithAdmin',{banner: "Legacy Search with Admin", message: ""})
+//     }else {
+//         console.log(`Legacy -> By ${ip} at ${date}`)
+//         res.render('pages/cardHome',{banner: "Legacy Search", message: ""})
+//     }
+//     console.log(`Legacy -> By ${ip} at ${date}`)
+// })
+
+//TESTROUTETESTROUTETESTROUTE
+router.get('/', async function(req,res){
+    let userip = req.ip
     let date = new Date().toLocaleString();
-    if (ip == `::ffff:`+address){
-        console.log("your special")
+    let token = await User.exists({ip:userip})
+
+    if (token == true){
+        console.log(`Admin Access by ${userip}`)
         res.render('pages/cardHomeWithAdmin',{banner: "Legacy Search with Admin", message: ""})
     }else {
-        console.log(`Legacy -> By ${ip} at ${date}`)
+        console.log(`Legacy -> By ${userip} at ${date}`)
         res.render('pages/cardHome',{banner: "Legacy Search", message: ""})
     }
-    console.log(`Legacy -> By ${ip} at ${date}`)
 })
 
 //Route for search by Model Number results to be displayed

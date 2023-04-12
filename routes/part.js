@@ -1,45 +1,78 @@
 const express = require('express')
 const router = express.Router()
-const address = "127.0.0.1"
 
 // Load DB Models
 const Part = require('../models/Part')
 const RemovedPart = require('../models/RemovedPart')
+const User = require('../models/User')
 
 //Route for parts search home page 
-router.get('/', function(req,res){
+// router.get('/', function(req,res){
     
-    let ip = req.ip
+//     let ip = req.ip
+//     let date = new Date().toLocaleString();
+//     if(ip == `::ffff:`+address){
+//         res.render('pages/partHomeWithAdmin',{banner:'Part Search With Admin', message:''})
+//     }
+//     else{
+//         res.render('pages/partHome', {banner: 'Part Search', message:''})
+//     }
+//     console.log(`Parts -> by ${ip} at ${date}`)
+// })
+
+router.get('/', async function(req,res){
+    let userip = req.ip
     let date = new Date().toLocaleString();
-    if(ip == `::ffff:`+address){
+    let token = await User.exists({ip:userip})
+
+    if (token == true){
+        console.log(`Part Admin Access by ${userip}`)
         res.render('pages/partHomeWithAdmin',{banner:'Part Search With Admin', message:''})
-    }
-    else{
+    }else {
+        console.log(`Parts -> By ${userip} at ${date}`)
         res.render('pages/partHome', {banner: 'Part Search', message:''})
     }
-    console.log(`Parts -> by ${ip} at ${date}`)
 })
 
 //Route for search by Part Number results to be displayed
-router.post('/partSearchResult', function(req,res){
-        var search = req.body
-        let ip = req.ip
-        let date = new Date().toLocaleString()
-        if (ip == '::ffff:'+address){
-            console.log(`Jeffro -> by ${ip} at ${date}`)
-            Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
+// router.post('/partSearchResult', function(req,res){
+//         var search = req.body
+//         let ip = req.ip
+//         let date = new Date().toLocaleString()
+//         if (ip == '::ffff:'+address){
+//             console.log(`Jeffro -> by ${ip} at ${date}`)
+//             Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
+//             function(err,response){
+//                 res.render('pages/partAdminSearchResult', {banner: 'Search Results', search,response, message:''})
+//             }).limit(20)
+//             } else {
+//                 console.log(`Parts -> by ${ip} at ${date}`)
+//                 Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
+//             function(err,response){
+//                 res.render('pages/partSearchResult', {banner: 'Search Results', search,response, message:''})
+//             }).limit(20)
+//             }
+//         })
+
+router.post('/partSearchResult', async function(req,res){
+    var search = req.body
+    let userip = req.ip
+    let date = new Date().toLocaleString();
+    let token = await User.exists({ip:userip})
+
+    if (token == true){
+        Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
             function(err,response){
                 res.render('pages/partAdminSearchResult', {banner: 'Search Results', search,response, message:''})
             }).limit(20)
             } else {
-                console.log(`Parts -> by ${ip} at ${date}`)
+                console.log(`Parts -> by ${userip} at ${date}`)
                 Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
             function(err,response){
                 res.render('pages/partSearchResult', {banner: 'Search Results', search,response, message:''})
             }).limit(20)
-            }
-        })
-
+        }
+})
 //Route for parts search by LV number
 router.get('/partHomeLV', function(req,res){
 	res.render('pages/partHomeLV', {banner: 'Search By "LV" Number', message:''})
