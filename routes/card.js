@@ -1,6 +1,7 @@
 const { response } = require('express')
 const express = require('express')
 const router = express.Router()
+const address = "127.0.0.1"
 
 // Load DB Models
 const Card = require('../models/Card')
@@ -10,9 +11,9 @@ const RemovedCard = require('../models/RemovedCard')
 router.get('/', function(req,res){
     let ip = req.ip
     let date = new Date().toLocaleString();
-    if (ip == `::ffff:127.0.0.1`){
+    if (ip == `::ffff:`+address){
         console.log("your special")
-        res.render('pages/cardHomeWithAdd',{banner: "Legacy Search", message: ""})
+        res.render('pages/cardHomeWithAdmin',{banner: "Legacy Search with Admin", message: ""})
     }else {
         console.log(`Legacy -> By ${ip} at ${date}`)
         res.render('pages/cardHome',{banner: "Legacy Search", message: ""})
@@ -77,7 +78,7 @@ router.post('/cardAdd', function(req,res){
         if(err)
             res.send("error");
         else
-            res.render('pages/cardAdmin', {banner: 'Legacy', message: 'Added Record to DB'})
+            res.render('pages/cardHomeWithAdmin', {banner: 'Legacy', message: 'Added Record to DB'})
     }) 
 })
 
@@ -99,7 +100,7 @@ router.post('/cardEdit/:id', function(req,res){
             if (docs == null){ 
                 res.render('pages/cardEdit', {banner: 'Search Results to Update Legacy Record', addedit, message:'Did not update record'}) 
             } else { 
-                res.redirect('/cardLogin/cardAdmin') 
+                res.redirect('/') 
             } 
         }
     )
@@ -194,7 +195,7 @@ router.get('/del/:id/delete',function(req,res){
         function(err){
             if(err) res.json(err)
             else
-                res.redirect('/cardLogin/cardAdmin')
+                res.redirect('/')
         });
 });
 

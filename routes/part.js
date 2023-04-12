@@ -8,9 +8,15 @@ const RemovedPart = require('../models/RemovedPart')
 
 //Route for parts search home page 
 router.get('/', function(req,res){
-    res.render('pages/partHome', {banner: 'Parts Search', message:''})
+    
     let ip = req.ip
     let date = new Date().toLocaleString();
+    if(ip == `::ffff:`+address){
+        res.render('pages/partHomeWithAdmin',{banner:'Part Search With Admin', message:''})
+    }
+    else{
+        res.render('pages/partHome', {banner: 'Part Search', message:''})
+    }
     console.log(`Parts -> by ${ip} at ${date}`)
 })
 
@@ -23,7 +29,7 @@ router.post('/partSearchResult', function(req,res){
             console.log(`Jeffro -> by ${ip} at ${date}`)
             Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
             function(err,response){
-                res.render('pages/jeffPartSearchResult', {banner: 'Jeffs Search Results', search,response, message:''})
+                res.render('pages/partAdminSearchResult', {banner: 'Search Results', search,response, message:''})
             }).limit(20)
             } else {
                 console.log(`Parts -> by ${ip} at ${date}`)
@@ -48,7 +54,7 @@ router.post('/partSearchResultLV', function(req,res){
             console.log(`Jeffro -> by ${ip} at ${date}`)
             Part.find({sapNumber: {$regex: search.searchWord, $options: 'i'}},
             function(err,response){
-                res.render('pages/jeffPartSearchResult', {banner: 'Jeffs Search Results', search,response, message:''})
+                res.render('pages/partAdminSearchResult', {banner: 'Search Results', search,response, message:''})
             }).limit(20)
             } else {
                 console.log(`Parts -> by ${ip} at ${date}`)
@@ -88,11 +94,8 @@ router.post('/partAdd', function(req,res){
         if(err){
             res.send("error")
         } else {
-            if (ip == '::ffff:'+address){
-                res.redirect('/partHome')
-        } else {
-            res.redirect('/partLogin/partAdmin')
-        }}
+            res.redirect('/partHome')
+        }
     })
 })
 
@@ -124,11 +127,7 @@ router.post('/partEdit/:id', function(req,res){
             if (docs == null){ 
                 res.render('pages/partEdit', {banner: 'Search Results to Update Parts Record', addedit, message:'Did not update record'}) 
             } else {
-                if (ip == '::ffff:'+address){
-                    res.redirect('/partHome')
-                } else {
-                    res.redirect('/partLogin/partAdmin')
-                }
+                res.redirect('/partHome')
             } 
     })
 })
@@ -167,11 +166,8 @@ router.get('/delpart/:id/delete',function(req,res){
             if(err){ 
                 res.json(err)
         } else {
-            if (ip == '::ffff:'+address){
-                res.redirect('/partHome')
-        } else {
-            res.redirect('/partLogin/partAdmin')
-        }}
+            res.redirect('/partHome')
+        } 
     })
 })
 
