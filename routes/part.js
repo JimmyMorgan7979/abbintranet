@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const address = "127.0.0.1"
 
 // Load DB Models
 const Part = require('../models/Part')
@@ -13,28 +14,18 @@ router.get('/', function(req,res){
     console.log(`Parts -> by ${ip} at ${date}`)
 })
 
-// //Route for search by Part Number results to be displayed
-// router.post('/partSearchResult', function(req,res){
-//     var search = req.body
-//     Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
-//         function(err,response){
-//             res.render('pages/partSearchResult', {banner: 'Search Results', search,response, message:''})
-//         }).limit(20)
-// })
-
 //Route for search by Part Number results to be displayed
 router.post('/partSearchResult', function(req,res){
         var search = req.body
         let ip = req.ip
         let date = new Date().toLocaleString()
-        if (ip == '::ffff:127.0.0.1'){
-            console.log("Your Special     " )
+        if (ip == '::ffff:'+address){
             console.log(`Jeffro -> by ${ip} at ${date}`)
             Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
             function(err,response){
                 res.render('pages/jeffPartSearchResult', {banner: 'Jeffs Search Results', search,response, message:''})
             }).limit(20)
-            }else{
+            } else {
                 console.log(`Parts -> by ${ip} at ${date}`)
                 Part.find({stockedAS: {$regex: search.searchWord, $options: 'i'}},
             function(err,response){
@@ -50,11 +41,22 @@ router.get('/partHomeLV', function(req,res){
 
 //Route for search by LV Number results to be displayed
 router.post('/partSearchResultLV', function(req,res){
-    var search = req.body
-    Part.find({sapNumber: {$regex: search.searchWord, $options: 'i'}},
-        function(err,response){
-            res.render('pages/partSearchResult', {banner: 'Search Results', search,response, message:''})
-        }).limit(20)
+        var search = req.body
+        let ip = req.ip
+        let date = new Date().toLocaleString()
+        if (ip == '::ffff:'+address){
+            console.log(`Jeffro -> by ${ip} at ${date}`)
+            Part.find({sapNumber: {$regex: search.searchWord, $options: 'i'}},
+            function(err,response){
+                res.render('pages/jeffPartSearchResult', {banner: 'Jeffs Search Results', search,response, message:''})
+            }).limit(20)
+            } else {
+                console.log(`Parts -> by ${ip} at ${date}`)
+                Part.find({sapNumber: {$regex: search.searchWord, $options: 'i'}},
+            function(err,response){
+                res.render('pages/partSearchResult', {banner: 'Search Results', search,response, message:''})
+            }).limit(20)
+            }
 })
 
 //Route to add parts
@@ -64,6 +66,7 @@ router.get ('/partAdd', function(req,res){
 
 router.post('/partAdd', function(req,res){
     var partInfo = req.body
+    let ip = req.ip
     var newPart = new Part({
         stockedAS: partInfo.stockedAS,
         description1: partInfo.description1,
@@ -82,17 +85,21 @@ router.post('/partAdd', function(req,res){
         priceUpdated: partInfo.priceUpdated
     });
     newPart.save(function(err,Part){
-        if(err)
+        if(err){
             res.send("error")
-        else
+        } else {
+            if (ip == '::ffff:'+address){
+                res.redirect('/partHome')
+        } else {
             res.redirect('/partLogin/partAdmin')
+        }}
     })
 })
 
 // Routes to edit parts
 router.post('/partUpdate', function(req,res){
     var search = req.body
-        Part.find({'stockedAS': search.searchWord},
+        Part.find({stockedAS: search.searchWord},
         function(err,response){
             res.render('pages/partEdit', {banner: 'Search Results to Update Parts Record', search,response, message:''})
         }).limit(1)
@@ -100,7 +107,7 @@ router.post('/partUpdate', function(req,res){
 // 
  router.post('/partUpdateLV', function(req,res){
     var search = req.body
-        Part.find({'sapNumber': search.searchWord},
+        Part.find({sapNumber: search.searchWord},
         function(err,response){
             res.render('pages/partEdit', {banner: 'Search Results to Update Parts Record', search,response, message:''})
         }).limit(1)
@@ -111,12 +118,17 @@ router.post('/partUpdate', function(req,res){
 router.post('/partEdit/:id', function(req,res){
     var updatepart = {_id: req.params.id}
     var addedit = req.body
+    let ip = req.ip
     Part.findOneAndUpdate(updatepart, addedit,
         function (err, docs) { 
             if (docs == null){ 
                 res.render('pages/partEdit', {banner: 'Search Results to Update Parts Record', addedit, message:'Did not update record'}) 
-            } else { 
-                res.redirect('/partLogin/partAdmin') 
+            } else {
+                if (ip == '::ffff:'+address){
+                    res.redirect('/partHome')
+                } else {
+                    res.redirect('/partLogin/partAdmin')
+                }
             } 
     })
 })
@@ -149,13 +161,18 @@ router.get('/delpart/:id/delete',function(req,res){
                     res.send("error")
             })
         })
+        let ip = req.ip
     Part.deleteOne({_id: req.params.id},
         function(err){
-            if(err) 
+            if(err){ 
                 res.json(err)
-            else
-                res.redirect('/partLogin/partAdmin')
-        })
+        } else {
+            if (ip == '::ffff:'+address){
+                res.redirect('/partHome')
+        } else {
+            res.redirect('/partLogin/partAdmin')
+        }}
+    })
 })
 
 module.exports = router
