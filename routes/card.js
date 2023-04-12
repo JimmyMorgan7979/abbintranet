@@ -8,9 +8,15 @@ const RemovedCard = require('../models/RemovedCard')
 
 // Route for home page "Legacy Search"
 router.get('/', function(req,res){
-    res.render('pages/cardHome',{banner: "Legacy Search", message: ""})
     let ip = req.ip
     let date = new Date().toLocaleString();
+    if (ip == `::ffff:127.0.0.1`){
+        console.log("your special")
+        res.render('pages/cardHome',{banner: "Legacy Search", message: ""})
+    }else {
+        console.log(`Legacy -> By ${ip} at ${date}`)
+        res.render('pages/cardHome',{banner: "Legacy Search", message: ""})
+    }
     console.log(`Legacy -> By ${ip} at ${date}`)
 })
 
@@ -35,6 +41,20 @@ router.post('/cardSearchResultSN', function(req,res){
          function(err,response){
              res.render('pages/cardSearchResult', {banner: 'Search Results', search,response, message:''})
          }).limit(20)
+ })
+ 
+ //Route for search by bin Number
+ router.get('/cardSearchBin', function(req,res){
+	res.render('pages/cardSearchBin', {banner: 'Search By Bin Number', message:''})
+})
+
+//Route for search by Bin Number results to be displayed
+router.post('/cardSearchResultBin', function(req,res){
+    var search = req.body
+     Card.find({binNumber: {$regex: search.searchWord, $options: 'i'}},
+         function(err,response){
+             res.render('pages/cardSearchResultBin', {banner: 'Search Results', search,response, message:''})
+         }).limit(50)
  })
 
 //Route for cards to be added to legacy database
@@ -106,6 +126,49 @@ router.post('/cardUpdateSN', function(req,res){
         }
     }).limit(1)
 })
+// Route to move a bin yall
+router.post('/cardBinMove', function(req,res){
+    var bin = req.body.bin
+    var newBinLocation = req.body.newBinLocation.toUpperCase()
+    console.log(newBinLocation)
+    Card.updateMany({binNumber:bin}, 
+        {binLocation:newBinLocation}, function (err, docs) {
+        if (err){
+            console.log(err)
+        }
+        else{
+            console.log("Updated Docs : ", docs);
+        }
+    });
+    res.redirect('/cardSearchBin')
+})
+
+//TESTINGTESTINGTESTINGTESTINGTESTING
+// router.post('/cardBinMove', function(req,res){
+//     var list = req.body.selected
+//     console.log(list)
+//     let newarray = list.split(',')
+//     console.log(newarray)
+
+//     var newLocation = req.body.newBinLocation
+//     console.log(newLocation)
+
+//     newarray.forEach(myFunction);
+//     function myFunction(item){
+//         Card.findOneAndUpdate({_id:item}, {binLocation:newLocation},
+//             function (err, docs) { 
+//                 if (docs == null){ 
+//                     // res.render('pages/cardEdit', {banner: 'Search Results to Update Legacy Record', addedit, message:'Did not update record'}) 
+//                 } else { 
+//                     // res.redirect('/cardLogin/cardAdmin') 
+//                     console.log(docs)
+//                 } 
+//             }
+//         )
+//     } 
+//     res.redirect('/cardSearchBin')
+// })
+
 
 //Route for items to be removed from the legacy database (Admin page) and inserts into a deleted table
 router.get('/del/:id/delete',function(req,res){
